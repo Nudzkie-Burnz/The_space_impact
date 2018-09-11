@@ -14,7 +14,7 @@ body{
 		position: relative;
 		width: 100%;
 		div#score_container{
-			color: red;
+			color: #00feff;
 			font-weight: bold;
 			height: 50px;
 			left: 10px;
@@ -23,12 +23,12 @@ body{
 		}
 		div#hero_life_container{
 			position: relative;
-			color: red;
 			left: 130px;
 			top: 1px;
 			span.life{
-				position: absolute;
+				color: red;
 				font-weight: bold;
+				position: absolute;
 				top: 10px;
 			}
 			ul#life_num{
@@ -36,6 +36,7 @@ body{
 				position: absolute;
 				top: 3px;
 				li.lifes{
+					color: red;
 					display: inline-block;
 					font-size: 20px;
 					margin-left: 2px;
@@ -53,7 +54,7 @@ body{
 			height: 80px !important;
 			width: 145px !important;
 		}
-		div#hero{
+		#hero{
 			background-image: url(../images/space-ship02.gif);
 			background-position: center;
 			background-repeat: no-repeat;
@@ -61,14 +62,13 @@ body{
 			border-top-right-radius: 50%;
 			border-bottom-right-radius: 30%;
 	/*		border: 1px solid red;*/
+			transition: all linear .3s;
 			height: 80px;
-			left: 3%;
 			position: absolute;
-			transition: all linear .2s;
-			top: 50%;
 			width: 145px;
-			z-index: 2;
+			z-index: 1;
 		}
+		
 		.color_life{
 			border: 1px solid red !important;
 		}
@@ -85,6 +85,19 @@ body{
 				width: 15px;
 			}
 		}
+		.enem_bullets{
+			background-color: #fe2525;
+			background-size: 100% 100%;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-radius: 50%;
+			position: absolute;
+			height: 8px;
+			transition: all ease-in .5s;
+			width: 8px;
+			z-index: 2;
+		}
+
 		.enemy_bugs{
 			/*animation: movebug 2s infinite;*/
 			background-image: url(../images/enemy_bug.gif);

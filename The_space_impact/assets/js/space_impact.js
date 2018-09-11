@@ -1,35 +1,31 @@
 
 var game_world = document.querySelector('#game_container');
-// var hero = document.querySelector('#hero');
 var hero = document.getElementById('hero');
 var bugs = document.querySelector('#enemy_bug').children;
 var hero_life = document.querySelector('.lifes');
-var heroLife = [0,1,2];
-var hero_rem_life = 3;
 var missile = [];
+var enemy_missiles = [];
 var score = 0;
 
 var hero_obj = {
-	x : 0,
-	y : 0,
+	x : 50,
+	y : 300,
 	score : 0,
 	life : 3
 }
 
-// var bugsArr = [];
-
 var enemy_bug = [
-	{x: 2000, y: 50,  life: 2, id: 0}, 
-	{x: 1850, y: 150, life: 2, id: 1}, 
-	{x: 1700, y: 280, life: 2, id: 2}, 
-	{x: 1850, y: 400, life: 2, id: 3}, 
-	{x: 2000, y: 500, life: 2, id: 4}	
+	{x: 2000, y: 50,  life: 2}, 
+	{x: 1850, y: 150, life: 2}, 
+	{x: 1700, y: 280, life: 2}, 
+	{x: 1850, y: 400, life: 2}, 
+	{x: 2000, y: 500, life: 2}	
 ];
 
 var enemy_drone = [
-	{x: 2500, y: 50, life: 5, id: 0}, 
-	{x: 2900, y: 300, life: 5, id: 1}, 
-	{x: 2500, y: 550, life: 5, id: 2}
+	{x: 2500, y: 50, life: 5}, 
+	{x: 2900, y: 300, life: 5}, 
+	{x: 2500, y: 550, life: 5}
 ];
 
 var requestanimation = 	window.requestAnimationFrame ||
@@ -37,51 +33,57 @@ var requestanimation = 	window.requestAnimationFrame ||
 						window.webkitRequestAnimationFrame ||
 						window.msRequestAnimationFrame;
 
-game_world.addEventListener('mousemove', move_hero, true);
+function displayHero() {
+	document.getElementById('hero').style.top = hero_obj.y +'px';
+	document.getElementById('hero').style.left = hero_obj.x +'px';
+}
+displayHero();
 
-var herox = '';
-var heroy = '';
+var heroId = document.getElementById('hero');
 
-function move_hero(e) {
-	var reposition = getPosition(game_world);
-	var xpos = e.clientX - reposition.x - (hero.offsetWidth -35);
-	var ypos = e.clientY - reposition.y - (hero.offsetHeight +285);
+document.onkeydown = function (e) {
 
-	
-	herox = xpos; //setting up to global variable
-	heroy = ypos; //setting up to global variable
+	if (e.keyCode == 37) {
+        hero_obj.x -= 30;
 
-	hero.style.transform = 'translate3d('+xpos+'px, '+ypos+'px, 0px)';
+        if (hero_obj.x <= -15) {
+        	hero_obj.x = -15;
+        }
+    }
+    else if (e.keyCode == 38) {
+       	hero_obj.y -= 30;
 
-	if (xpos > 800) {
-		hero.style.transform = 'translate3d('+800+'px, '+ypos+'px, 0px)';
-	}
+       	if (hero_obj.y <= 0) {
+       		hero_obj.y = 0;
+       	}
+    }
+    else if (e.keyCode == 39) {
+        hero_obj.x += 30;
+
+        if (hero_obj.x >= 950) { 
+        	hero_obj.x = 950;    //boundery set for boss area
+        }
+    }
+    else if (e.keyCode == 40) {	
+        hero_obj.y += 30;
+
+        if (hero_obj.y >= 640) {
+        	hero_obj.y = 640;
+        }
+    }
+    else if (e.keyCode == 32) {	
+        missile.push(
+    	{
+    		x: hero_obj.x + 90, 
+    		y:hero_obj.y + 5
+    	});
+
+		// hero_gun_effects();
+		projectmissile();
+    }
+    displayHero();
 }
 
-function getPosition(el) {
-	var xPosition = 0;
-	var yPosition = 0;
-
-	while (el) {
-	if (el.tagName == "BODY") {
-		// deal with browser quirks with body/window/document and page scroll
-		var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
-		var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
-
-		xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
-		yPosition += (el.offsetTop - yScrollPos + el.clientTop);
-	} else {
-		xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-		yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-	}
-
-	el = el.offsetParent;
-	}
-	return {
-		x: xPosition,
-		y: yPosition
-	};
-}
 
 function project_enemyBug() {
 	enemy1 = '';
@@ -109,9 +111,9 @@ function move_enemyBugs(){
     for (var i = 0; i<enemy_bug.length; i++) {
         enemy_bug[i].x -= 2;
 
-        if (enemy_bug[i].x < -200){
+       	if (enemy_bug[i].x < -200){
             enemy_bug[i].x = 1700;
-            enemy_bug[i].y = Math.random()*450; /*	use the browser height as reference	*/
+            enemy_bug[i].y = Math.random()*document.body.clientHeight; /*	use the browser height as reference	*/
         }
     }
 }
@@ -119,7 +121,7 @@ function move_enemyBugs(){
 function projectEnemyDrones() {
 	enemy2 = '';
 
-	for (var i = 0; i <enemy_drone.length; i++) {
+	for (var i = 0; i < enemy_drone.length; i++) {
 		enemy2 += '<div class="enemy_drones" style="top:'+enemy_drone[i].y+'px; left:'+enemy_drone[i].x+'px;"></div>'
 	}
 
@@ -137,13 +139,49 @@ function move_enemyDrones(){
     }
 }
 
+function enemy_backFire() {
+	var enemy_bullet = '';
+
+	for (var i = 0; i < enemy_missiles.length; i++) {
+		enemy_bullet += '<div class="enem_bullets" style="top:' + enemy_missiles[i].y + 'px; left:' + enemy_missiles[i].x + 'px;"></div>';
+	}
+	
+	document.getElementById('enemy_backfire').innerHTML = enemy_bullet;
+}
+
+
+function enemyMissile_Move() {
+	for (var i = 0; i < enemy_missiles.length; i++) {
+        enemy_missiles[i].x -= 3;
+
+       	if (enemy_missiles[i].x < -50){
+            enemy_missiles.splice(i, 1);
+        }
+    }
+}
+
+function timeOut() {
+	setTimeout(function () {
+		
+		for (var i = Math.floor((Math.random() * enemy_bug.length) + 1); i < enemy_bug.length; i++) {
+			enemy_missiles.push({
+	      		x: enemy_bug[i].x + 50, 
+	      		y: enemy_bug[i].y + 30,
+	      	});
+		}
+
+        timeOut();
+    }, 5000);	
+}
+timeOut();
 	
 function moveEnemies() {
-
 	project_enemyBug();
 	move_enemyBugs();
+	enemyMissile_Move();
+	enemy_backFire();
 
-	if (score >= 1000) {
+	if (hero_obj.score >= 1000) {
 		move_enemyDrones();
 		projectEnemyDrones();
 	}
@@ -151,7 +189,6 @@ function moveEnemies() {
 	requestanimation(moveEnemies);
 }
 moveEnemies();
-
 
 function projectmissile() {
 	output ='';
@@ -163,18 +200,10 @@ function projectmissile() {
 	document.querySelector('#missiles').innerHTML = output;	
 }
 
-document.addEventListener('click', launch, true);
-
 function hero_gun_effects() {
 	var hero_gun = new Audio('../assets/sounds/gun_shot_hero.mp3');
 
 	hero_gun.play();
-}
-
-function launch(heroX, heroY) {
-	missile.push({x: herox + 170, y:heroy +387});
-	// hero_gun_effects();
-	projectmissile();
 }
 
 function movemissiles() {
@@ -198,9 +227,8 @@ function missile_collision() {
 	
     for (var i = 0; i<missile.length; i++) {
         for (var z = 0; z<enemy_bug.length; z++) {
-        	if( enemy_bug.indexOf(z) )
-        	{
-        		if( (missile[i].x+5 >= enemy_bug[z].x + 50) 
+        	if( enemy_bug.indexOf(z) ){
+        		if( (missile[i].x+5 >= enemy_bug[z].x + 40 ) 
 	        		&& (missile[i].y + 5 >= enemy_bug[z].y + 10 && missile[i].y + 3 <= enemy_bug[z].y + 70) ) {
 	        		missile.splice(i, 1);
 	        		enemy_bug[z].life--;
@@ -214,8 +242,8 @@ function missile_collision() {
 
 					if (enemy_bug[z].life == 0) {
 						enemy_bug.splice(z, 1);
-						enemy_explosion_effects();
-						score += 100;
+						// enemy_explosion_effects();
+						hero_obj.score +=100;
 					}
 	    	   	}
         	}
@@ -236,7 +264,7 @@ function missile_collision_Drone() {
  				if (enemy_drone[z].life == 0) {
 					enemy_drone.splice(z, 1);
 					// enemy_explosion_effects();
-					score+=300;
+					hero_obj.score +=300;
 				}
         	}
         }
@@ -245,36 +273,35 @@ function missile_collision_Drone() {
 
 function enemy_return() {
 	//return bug enemies
+	
 	if (enemy_bug.length == 0) {
-		enemy_bug.push(
-			{x: 2500, y: Math.random()*630,  life:2, id: 0}, 
-			{x: 1850, y: Math.random()*630,  life:2, id: 1}, 
-			{x: 1700, y: Math.random()*630,  life:2, id: 2}, 
-			{x: 1850, y: Math.random()*630,  life:2, id: 3}, 
-			{x: 2000, y: Math.random()*630,  life:2, id: 4}, 
-			{x: 1980, y: Math.random()*630,  life:2, id: 5}, 
-			{x: 2300, y: Math.random()*630,  life:2, id: 6},
-			{x: 3000, y: Math.random()*630,  life:2, id: 7},
-			{x: 2800, y: Math.random()*630,  life:2, id: 8},
-			{x: 2350, y: Math.random()*630,  life:2, id: 9}
-		);
+
+		for (var i = 0; i < 10; i++) {
+			enemy_bug.push({ 
+				x: Math.floor((Math.random() * 3000) + 2000), 
+				y: Math.random() * 634,  
+				life:2
+			});
+		}
 	}
+	
 	//return drone enemies
 	if (enemy_drone.length == 0) {
-		enemy_drone.push(
-			{x: 5500, y: Math.random()*600,  life:5, id: 0}, 
-			{x: 4200, y: Math.random()*600,  life:5, id: 1}, 
-			{x: 4400, y: Math.random()*600,  life:5, id: 2},
-			{x: 3800, y: Math.random()*600,  life:5, id: 4},
-			{x: 3000, y: Math.random()*600,  life:5, id: 5}
-		);
+		for (var i = 0; i < 5; i++) {
+			enemy_drone.push({ 
+				x: Math.floor((Math.random() * 3000) + 2500), 
+				y: Math.random() * 634,  
+				life:5
+			});
+		}
 	}
 }
+
 
 function projectHero_Life() {
 	heart = '';
 	
-	for (var i = 0; i < hero_rem_life; i++) {
+	for (var i = 0; i < hero_obj.life; i++) {
 		heart += '<li class="lifes">❤️</li>';
 	}
 
@@ -288,20 +315,18 @@ function hero_collision() {
 	var heroFinalY = heroPos.y + 80;
 	
 	for(var y=0; y<enemy_bug.length; y++) {
-		if ( (heroFinalX >= enemy_bug[y].x +40 
-			&& heroFinalX <= enemy_bug[y].x +170) 
-			&& (heroY >= enemy_bug[y].y 
-			&& enemy_bug[y].y +80 >= heroY)) {
+		if ( (heroFinalX >= enemy_bug[y].x +40 && heroFinalX <= enemy_bug[y].x +170) 
+			&& (heroY >= enemy_bug[y].y && enemy_bug[y].y +80 >= heroY)) {
 			
-			hero_rem_life--;
+			hero_obj.life --;
 
-			// for (var i = 0; i < heroLife.length; i++) {
-			// 	heroLife.splice(heroLife.length-1,1);
-			// }
+			console.log(hero_obj.life);
 
-			console.log(hero_rem_life);
+			for (var i = 0; i < heroLife.length; i++) {
+				heroLife.splice(heroLife.length-1,1);
+			}
 
-			if(hero_rem_life == 0)
+			if(hero_obj.life == 2)
 			{
 				hero.classList.add('explode');
 			}
@@ -320,12 +345,12 @@ function dissapear_hero() {
 }
 
 function project_score() {
-	document.querySelector('#score').innerHTML = score;
+	document.querySelector('#score').innerHTML = hero_obj.score;
 }
 
 function gameloop() {
+
 	missile_collision();
-	enemy_return();
 	hero_collision();
 	missile_collision_Drone();
 
@@ -334,10 +359,24 @@ function gameloop() {
 
 	movemissiles();
 	projectmissile();
+
+	enemy_return();
+
 }
 
+setInterval(gameloop, 16.6);
+
+function setGameloop() {
+    setTimeout(function () {
+
+       
+        setGameloop();
+    }, 10);
+}
+setGameloop()
+
 /*	change to setTimeout	*/
- setInterval(gameloop, 16.67);
+ 
 
  /*	COMMENTS	*/
 /*
@@ -354,9 +393,9 @@ function gameloop() {
 
 /*	GOALS:	*/
 /*	
-	- use keyboard-driven controls
-	- use Hero object
-	- generate enemies using looping statements
+	- use keyboard-driven controls done!
+	- use Hero object done!
+	- generate enemies using looping statements done!
 	- implement enemies shooting back at player
 	- implement different Boss enemies
 */
