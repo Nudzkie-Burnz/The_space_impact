@@ -37,7 +37,6 @@ function displayHero() {
 	document.getElementById('hero').style.top = hero_obj.y +'px';
 	document.getElementById('hero').style.left = hero_obj.x +'px';
 }
-displayHero();
 
 var heroId = document.getElementById('hero');
 
@@ -79,25 +78,25 @@ document.onkeydown = function (e) {
     	});
 
 		// hero_gun_effects();
-		projectmissile();
+		move_hero_missiles();
     }
     displayHero();
 }
 
 
-function project_enemyBug() {
+function project_enemybugs() {
 	enemy1 = '';
 
 	for(var z = 0; z<enemy_bug.length; z++){
 		let bug_state = (enemy_bug[z].life == 0) ? 'destroyed' : 'alive';
 		
 		enemy1 += '<div id="bug_'+ z +'" class="enemy_bugs '+ bug_state +'" style="top:'+ enemy_bug[z].y +'px; left:'+ enemy_bug[z].x +'px;">\n \
-					<ul id="enemy_health" data-id="'+ z +'">';
+					<ul id="enemy_health">';
 
 		/*	loop to show life remaining	*/
 		for(var life = 0; life < enemy_bug[z].life ; life ++)
 		{
-			enemy1 += '<li class="enemy_barHealth health1"></li>\n';
+			enemy1 += '<li class="enemy_barHealth"></li>\n';
 		}
 
 		enemy1 += '</ul>\n \
@@ -107,7 +106,7 @@ function project_enemyBug() {
 	document.querySelector('#enemy_bug').innerHTML = enemy1;
 }
 
-function move_enemyBugs(){
+function move_bug_enemies(){
     for (var i = 0; i<enemy_bug.length; i++) {
         enemy_bug[i].x -= 2;
 
@@ -118,7 +117,7 @@ function move_enemyBugs(){
     }
 }
 
-function projectEnemyDrones() {
+function project_enemy_drones() {
 	enemy2 = '';
 
 	for (var i = 0; i < enemy_drone.length; i++) {
@@ -128,7 +127,7 @@ function projectEnemyDrones() {
 	document.querySelector('#enemy_drone').innerHTML = enemy2;
 }
 
-function move_enemyDrones(){
+function move_enemy_drones(){
     for (var i = 0; i<enemy_drone.length; i++) {
         enemy_drone[i].x -= 2;
 
@@ -139,7 +138,7 @@ function move_enemyDrones(){
     }
 }
 
-function enemy_backFire() {
+function enemy_bugs_backFire() {
 	var enemy_bullet = '';
 
 	for (var i = 0; i < enemy_missiles.length; i++) {
@@ -150,7 +149,7 @@ function enemy_backFire() {
 }
 
 
-function enemyMissile_Move() {
+function enemy_bug_missile_move() {
 	for (var i = 0; i < enemy_missiles.length; i++) {
         enemy_missiles[i].x -= 3;
 
@@ -160,7 +159,7 @@ function enemyMissile_Move() {
     }
 }
 
-function timeOut() {
+function enemy_bug_backfire_timeout() {
 	setTimeout(function () {
 		
 		for (var i = Math.floor((Math.random() * enemy_bug.length) + 1); i < enemy_bug.length; i++) {
@@ -170,27 +169,12 @@ function timeOut() {
 	      	});
 		}
 
-        timeOut();
+        enemy_bug_backfire_timeout();
     }, 5000);	
 }
-timeOut();
-	
-function moveEnemies() {
-	project_enemyBug();
-	move_enemyBugs();
-	enemyMissile_Move();
-	enemy_backFire();
+enemy_bug_backfire_timeout();
 
-	if (hero_obj.score >= 1000) {
-		move_enemyDrones();
-		projectEnemyDrones();
-	}
-
-	requestanimation(moveEnemies);
-}
-moveEnemies();
-
-function projectmissile() {
+function project_hero_missile() {
 	output ='';
 
 	for(var i = 0; i<missile.length; i++){
@@ -206,7 +190,7 @@ function hero_gun_effects() {
 	hero_gun.play();
 }
 
-function movemissiles() {
+function move_hero_missiles() {
 	for (var i = 0; i<missile.length; i++) {
         missile[i].x += 5;
 
@@ -223,18 +207,18 @@ function enemy_explosion_effects() {
 	enemy_explosion.play();
 }
 
-function missile_collision() {
+function missile_collision_Bugs() {
 	
     for (var i = 0; i<missile.length; i++) {
         for (var z = 0; z<enemy_bug.length; z++) {
         	if( enemy_bug.indexOf(z) ){
-        		if( (missile[i].x+5 >= enemy_bug[z].x + 40 ) 
+        		if( (missile[i].x+5 > enemy_bug[z].x + 20 && missile[i].x + 5 <= enemy_bug[z].x + 40 ) 
 	        		&& (missile[i].y + 5 >= enemy_bug[z].y + 10 && missile[i].y + 3 <= enemy_bug[z].y + 70) ) {
-	        		missile.splice(i, 1);
+	        
+	        		missile[i].x = 1400;
 	        		enemy_bug[z].life--;
 
 	    			if (enemy_bug[z].life == 1) {
-					// var enem_health = bugs[z].children[0].children[1];
 						if (bugs[z].getAttribute('id') == enemy_bug[z].id) {
 							var enemy_explode = bugs[z];
 						}
@@ -251,14 +235,14 @@ function missile_collision() {
     }
 }
 
-function missile_collision_Drone() {
+function missile_collision_Drones() {
 	
     for (var i = 0; i < missile.length; i++) {
         for (var z = 0; z<enemy_drone.length; z++) {
 
-        	if((missile[i].x + 5 >= enemy_drone[z].x +85) 
+        	if((missile[i].x + 5 > enemy_drone[z].x && missile[i].x + 5 <= enemy_drone[z].x + 80) 
         		&& (missile[i].y+5 >= enemy_drone[z].y +10 && missile[i].y+3 <= enemy_drone[z].y+70)) {
-        		missile.splice(i, 1);
+        		missile[i].x = 1400;
  				enemy_drone[z].life --;
 
  				if (enemy_drone[z].life == 0) {
@@ -272,8 +256,8 @@ function missile_collision_Drone() {
 }
 
 function enemy_return() {
-	//return bug enemies
 	
+	//return bug enemies
 	if (enemy_bug.length == 0) {
 
 		for (var i = 0; i < 10; i++) {
@@ -298,11 +282,11 @@ function enemy_return() {
 }
 
 
-function projectHero_Life() {
+function project_hero_Life() {
 	heart = '';
 	
 	for (var i = 0; i < hero_obj.life; i++) {
-		heart += '<li class="lifes">❤️</li>';
+		heart += '<li class="lifes" data-id="'+ i +'">❤️</li>';
 	}
 
 	document.querySelector('#life_num').innerHTML = heart;
@@ -313,69 +297,77 @@ function hero_collision() {
 	var heroY = heroPos.y +40;
 	var heroFinalX = heroPos.x + 110;
 	var heroFinalY = heroPos.y + 80;
+	var Hero_rem_life = document.getElementById('life_num').children;
 	
 	for(var y=0; y<enemy_bug.length; y++) {
 		if ( (heroFinalX >= enemy_bug[y].x +40 && heroFinalX <= enemy_bug[y].x +170) 
-			&& (heroY >= enemy_bug[y].y && enemy_bug[y].y +80 >= heroY)) {
-			
+		&& (heroY >= enemy_bug[y].y && enemy_bug[y].y +80 >= heroY)) {
+
 			hero_obj.life --;
-
-			console.log(hero_obj.life);
-
-			for (var i = 0; i < heroLife.length; i++) {
-				heroLife.splice(heroLife.length-1,1);
-			}
-
-			if(hero_obj.life == 2)
-			{
-				hero.classList.add('explode');
-			}
-
-			// hero.classList.add('explode');
-			// setInterval(dissapear_hero, 2000);
-			// enemy_explosion_effects();
-			// console.log(hero_life.length);
 		}
 	}
 }
 
-function dissapear_hero() {
-	hero.style.transition = 'all 100s ease-in';
-	hero.style.opacity = '0';
+function hero_enemyMissileCollide() {
+	var heroPos = hero.getBoundingClientRect();
+	var heroY = heroPos.y +40;
+	var heroFinalX = heroPos.x + 80;
+	var heroFinalY = heroPos.y + 80;
+
+	for (var i = 0; i < enemy_bug.length; i++) {
+		for (var x = 0; x < enemy_missiles.length; x++) {
+			
+			if ( (enemy_missiles[x].x <= heroFinalX && heroPos.x <= enemy_missiles[x].x) 
+				&& enemy_missiles[x].y + 8 > heroPos.y && heroFinalY > enemy_missiles[x].y + 8){
+				console.log('hit');
+			}
+		}
+	}
 }
+
+
 
 function project_score() {
 	document.querySelector('#score').innerHTML = hero_obj.score;
 }
 
-function gameloop() {
+function moveEnemies() {
+	enemy_bugs_backFire(); //Enemy shooots back
+	enemy_bug_missile_move(); //Enemy Missile move
+	move_bug_enemies(); //Move Enemies
+	project_enemybugs(); // Project the bug enemies
 
-	missile_collision();
-	hero_collision();
-	missile_collision_Drone();
+	displayHero(); //Display the space hero
+	move_hero_missiles(); //Hero Missile moves
+	project_hero_missile(); //Project the hero missile
 
-	project_score();
-	projectHero_Life();
+	project_hero_Life(); //Projects the hero life
+	project_score(); //Project the score
 
-	movemissiles();
-	projectmissile();
+	if (hero_obj.score >= 1000) {
+		move_enemy_drones();
+		project_enemy_drones();
+	}
 
-	enemy_return();
-
+	requestanimation(moveEnemies); // Request animation frame for the game
 }
-
-setInterval(gameloop, 16.6);
+moveEnemies();
 
 function setGameloop() {
-    setTimeout(function () {
+    setTimeout(function () {  //Game logic loop changed to setTimeout to prevent data garbage collection
+    	
+    	missile_collision_Bugs(); 
+		missile_collision_Drones();
+		hero_collision();
 
-       
+		hero_enemyMissileCollide();
+       	
+    	enemy_return();
+
         setGameloop();
-    }, 10);
+    }, 50);
 }
 setGameloop()
-
-/*	change to setTimeout	*/
  
 
  /*	COMMENTS	*/
@@ -396,6 +388,6 @@ setGameloop()
 	- use keyboard-driven controls done!
 	- use Hero object done!
 	- generate enemies using looping statements done!
-	- implement enemies shooting back at player
+	- implement enemies shooting back at player done!
 	- implement different Boss enemies
 */
