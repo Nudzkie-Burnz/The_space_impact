@@ -31,6 +31,6 @@
 </head>
 <body>
 	<h1>The Space Impact</h1>
-	<a href="The_space_impact\views">Play Space Impact II</a>
+	<a href="The_space_impact\views\space_impact.php">Play Space Impact II</a>
 </body>
 </html>
