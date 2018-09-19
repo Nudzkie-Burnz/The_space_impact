@@ -18,19 +18,30 @@
 			font-size: 50px;
 			margin: 100px 0 30px 0;
 		}
-		a{
+		span{
+			cursor: pointer;
 			font-size: 20px;
 			font-weight: bold;
 			color: #b49d00;
 			text-decoration: none;
 		}
-		a:hover{
+		span:hover{
 			text-decoration: underline;
 		}
 	</style>
 </head>
 <body>
 	<h1>The Space Impact</h1>
-	<a href="The_space_impact\views\space_impact.php">Play Space Impact II</a>
+	<span id="play">Play Space Impact II</span>
+
+	<script>
+		var play = document.getElementById('play');
+
+		play.addEventListener('click', play_space_impact,true);
+
+		function play_space_impact() {
+			window.open('The_space_impact/views/space_impact.php');
+		}
+	</script>
 </body>
 </html>

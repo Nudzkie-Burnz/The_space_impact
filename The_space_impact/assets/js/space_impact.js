@@ -20,12 +20,13 @@ window.onload = function() {
 	var soundtrack1_game = new Audio('../assets/sounds/space_impact_soundtrack1-Dark Strings Metal Rap.mp3');
 	var click = new Audio('../assets/sounds/click_menu.mp3');
 
-	game_menus.addEventListener('click', clickSound, true)
 	new_game.addEventListener('click', start_game, true);
-	game_over_ok.addEventListener('click', closeWindow, true);
+	game_menus.addEventListener('click', clickSound, true)
 	game_menu_wrapper.addEventListener('mousemove', soundTrack, true);
 	about.addEventListener('click', about_spaceImpact, true);
+	game_over_ok.addEventListener('click', closeWindow, true);
 	victory_exit.addEventListener('click', closeWindow, true);
+	close_game.addEventListener('click', closeWindow, true);
 
 	function about_spaceImpact() {
 		window.open('https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Space_Impact.html');
@@ -54,11 +55,9 @@ window.onload = function() {
 
 		startGame();
 	}
-
-	close_game.addEventListener('click', closeWindow, true);
-
+	
 	function closeWindow() {
-	   	window.close();
+		window.close();
 	}
 
 
@@ -155,11 +154,11 @@ window.onload = function() {
 				hero_gun_effects();
 				move_hero_missiles();
 		    }
-		    else if (e.keyCode == 27) {
-		    	game_container.classList.add('display_none');
-				game_menu_wrapper.classList.remove('display_none');
-				gameplay.pause();
-		    }
+		  //   else if (e.keyCode == 27) {
+		  //   	game_container.classList.add('display_none');
+				// game_menu_wrapper.classList.remove('display_none');
+				// gameplay.pause();
+		  //   }
 
 		    displayHero();
 		}
@@ -408,14 +407,12 @@ window.onload = function() {
 				}
 			}
 			if (hero_obj.life <= 0) {
-				game_over_menu.classList.remove('display_none');
 				game_container.classList.add('display_none');
+				game_over_menu.classList.remove('display_none');
 			}
 
 			document.querySelector('#life_num').innerHTML = heart;
 		}
-
-		
 
 		function hero_collisionTo_enemyBugs() {
 			var heroPos = hero.getBoundingClientRect();
@@ -655,7 +652,7 @@ window.onload = function() {
 				project_enemy_drones();
 			}
 
-			if(hero_obj.score >= 500) {
+			if(hero_obj.score >= 5000) {
 				
 				moveBoss(); // move the boss position
 				project_boss_missile(); //projects the boss missile
