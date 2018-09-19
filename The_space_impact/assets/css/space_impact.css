@@ -189,30 +189,101 @@ body div#game_container .boss_explosion {
   height: 270px;
   width: 380px;
 }
+body div#game_container span#victory {
+  color: #00a2ff;
+  font-weight: bold;
+  font-size: 80px;
+  padding: 20px;
+  position: absolute;
+  text-shadow: 2px 2px 4px #0000;
+  transform: translate3d(-500px, 280px, 0);
+  transition: all ease-in 0.5s;
+}
+body .ok {
+  font-weight: bold;
+  color: #85adc4;
+  cursor: pointer;
+  text-shadow: 2px 2px 4px #000000;
+}
+body div#restart_game {
+  background: url(../images/game-over.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  height: 100vh;
+  text-align: center;
+  width: 100%;
+  padding-top: 30px;
+  z-index: 2;
+}
+body div#restart_game div#restart_menu {
+  height: 400px;
+  margin: 0px auto;
+  width: 500px;
+}
+body div#restart_game div#restart_menu h1.game_over_title {
+  color: #cf2828;
+  font-size: 80px;
+  margin: 180px auto 40px auto;
+  text-shadow: 2px 2px 4px #000000;
+  width: 500px;
+}
+body div#restart_game div#restart_menu div#final_score_container {
+  color: #85adc4;
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 4px #000000;
+}
+body div#restart_game div#restart_menu div#final_score_container span#final_score {
+  color: #c27a00;
+  font-weight: bold;
+  font-size: 30px;
+  text-shadow: 2px 2px 4px #000000;
+}
+body div#restart_game div#restart_menu div#restart_option h3 {
+  color: #85adc4;
+  font-size: 30px;
+  text-shadow: 2px 2px 4px #000000;
+  margin-bottom: 20px;
+}
+body div#restart_game div#restart_menu div#restart_option span#gameOver_ok {
+  color: #c27a00;
+}
+body div#restart_game div#restart_menu div#restart_option span#gameOver_ok:hover {
+  color: red;
+}
 body #wrapper {
   background: url('../images/space-impact-background.jpg');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh;
+  height: 100%;
   text-align: center;
   width: 100%;
-  padding-top: 30px;
-  /* Safari */
+  padding: 50px 0px;
+  z-index: 2;
 }
 body #wrapper h1#game_title {
-  color: #85adc4;
+  color: #3785b2;
   font-weight: bold;
   font-size: 60px;
-  margin: 0 auto 100px auto;
+  margin: 0 auto 50px auto;
   text-shadow: 2px 2px 4px #000000;
-  width: 400px;
+  width: 485px;
 }
-body #wrapper ul#game_menu {
-  width: 400px;
-  margin: 0 auto 100px auto;
+body #wrapper div#menu_container {
+  height: 403px;
+  margin: 0px auto;
+  padding: 20px;
+  width: 800px;
+  /* Safari */
 }
-body #wrapper ul#game_menu li.game_menu_list {
+body #wrapper div#menu_container ul#game_menu {
+  width: 400px;
+  margin: 0 auto 80px auto;
+}
+body #wrapper div#menu_container ul#game_menu li.game_menu_list {
   font-weight: bold;
   color: #c27a00;
   cursor: pointer;
@@ -223,10 +294,10 @@ body #wrapper ul#game_menu li.game_menu_list {
   text-shadow: 2px 2px 4px #000000;
   transition: all ease-in 0.1s;
 }
-body #wrapper ul#game_menu li.game_menu_list:hover {
+body #wrapper div#menu_container ul#game_menu li.game_menu_list:hover {
   transform: scale(1.1);
 }
-body #wrapper #game_loader {
+body #wrapper div#menu_container #game_loader {
   animation: spin 2s linear infinite;
   border: 16px solid #2a4162;
   border-radius: 50%;
@@ -235,11 +306,11 @@ body #wrapper #game_loader {
   line-height: 50px;
   margin: 0 auto 20px auto;
   width: 120px;
-  -webkit-animation: spin 2s linear infinite;
+  -webkit-animation: spin 1.5s linear infinite;
   /* Safari */
   z-index: 10;
 }
-body #wrapper span {
+body #wrapper div#menu_container span {
   color: #c27a00;
   font-weight: bold;
   font-size: 20px;
@@ -261,4 +332,43 @@ body #wrapper span {
   100% {
     transform: rotate(360deg);
   }
+}
+body div#victory_container {
+  background: url('../images/victorious.jpg');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  padding-top: 200px;
+  width: 100%;
+}
+body div#victory_container div#contents {
+  height: 550px;
+  margin: 0px auto;
+  text-align: center;
+  width: 800px;
+}
+body div#victory_container div#contents h1 {
+  color: #b4e92d;
+  font-size: 80px;
+  text-shadow: 2px 2px 4px #000;
+}
+body div#victory_container div#contents div#victory_score_container {
+  color: #0f98e7;
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 70px;
+  text-shadow: 2px 2px 4px #000;
+  transform: translate3d(-1000px, 0, 0px);
+  transition: all ease-in 0.3s;
+}
+body div#victory_container div#contents div#victory_score_container span#victory_score {
+  color: #c27a00;
+  position: absolute;
+  transform: translate3d(0, -500px, 0px);
+  transition: all ease-in 0.3s;
+}
+body div#victory_container div#contents span#victory_exit {
+  color: #b4e92d;
+  font-size: 30px;
 }
