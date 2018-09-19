@@ -18,20 +18,47 @@
 			font-size: 50px;
 			margin: 100px 0 30px 0;
 		}
-		span{
+		span#play{
+			border: 2px solid #0b96be;
+			color: #b49d00;
 			cursor: pointer;
 			font-size: 20px;
 			font-weight: bold;
-			color: #b49d00;
-			text-decoration: none;
+			padding: 10px;
 		}
-		span:hover{
-			text-decoration: underline;
+		span#play:hover{
+			background-color: #0b96be;
+			text-shadow: 2px 1px 4px #000;
+		}
+		div#controls{
+			border: 2px solid #b49d00;
+			height: 150px;
+			padding: 10px;
+			margin: 50px auto 40px auto;
+			width: 400px;
+		}
+		h2{
+			color: #0b96be;
+			margin: 5px 0px 20px 0px;
+		}
+		div#controls .ctrl_list{
+			color: #b49d00;
+			display: block;
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 30px;
 		}
 	</style>
 </head>
 <body>
 	<h1>The Space Impact</h1>
+
+	<div id="controls">
+		<h2>- CONTROLS -</h2>
+		<span class="ctrl_list">Fire / Shoot -&nbsp; (Space Bar)</span>
+		<span class="ctrl_list">Movement -&nbsp; (Arrow Keys)</span>
+	</div>
+
 	<span id="play">Play Space Impact II</span>
 
 	<script>
